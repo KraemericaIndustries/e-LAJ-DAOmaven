@@ -38,6 +38,10 @@ public class App {
 		}
 		
 		
+		userDao.delete(new User(5, null));
+		
+		
+		
 		try {
 			db.close();
 		} catch (SQLException e) {
