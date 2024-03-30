@@ -53,8 +53,16 @@ public class UserDaoImpl implements UserDao {
 
 	@Override
 	public void update(User u) {
-
-
+		var conn = Database.instance().getConnection();
+		
+		try {
+			var stmt = conn.prepareStatement("update user set name = ? where id = ?");
+			stmt.setString(1, u.getName());
+			stmt.setInt(2, u.getId());
+			stmt.executeUpdate();
+		} catch (SQLException e) {
+			throw new DaoException(e);
+		}
 	}
 
 	@Override

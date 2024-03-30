@@ -29,10 +29,16 @@ public class App {
 		
 		users.forEach(System.out::println);
 		
-		var userOpt = userDao.findById(1);
+		var userOpt = userDao.findById(4);
 		
 		if(userOpt.isPresent()) {
-			System.out.println("Retrieved: " + userOpt.get());	
+			
+			User user = userOpt.get();
+			System.out.println("Retrieved: " + user);
+			user.setName("Jeebs");	
+			
+			userDao.update(user);
+			
 		} else {
 			System.out.println("No user was retrieved");
 		}
