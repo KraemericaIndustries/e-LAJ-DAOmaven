@@ -22,10 +22,12 @@ public class App {
 		
 		UserDao userDao = new UserDaoImpl();
 		
-		userDao.save(new User("Mars"));
-		userDao.save(new User("Mercury"));
+//		userDao.save(new User("Mars"));
+//		userDao.save(new User("Mercury"));
 		
+		var users = userDao.getAll();
 		
+		users.forEach(System.out::println);
 		
 		try {
 			db.close();
