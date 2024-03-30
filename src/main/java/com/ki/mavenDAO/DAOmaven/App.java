@@ -29,6 +29,15 @@ public class App {
 		
 		users.forEach(System.out::println);
 		
+		var userOpt = userDao.findById(1);
+		
+		if(userOpt.isPresent()) {
+			System.out.println("Retrieved: " + userOpt.get());	
+		} else {
+			System.out.println("No user was retrieved");
+		}
+		
+		
 		try {
 			db.close();
 		} catch (SQLException e) {
