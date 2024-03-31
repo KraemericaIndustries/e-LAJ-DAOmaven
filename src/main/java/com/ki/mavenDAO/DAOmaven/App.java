@@ -12,7 +12,14 @@ public class App {
 		
 		Properties props = new Properties();
 		
-		String propertiesFile = "/config/db.properties";
+		String env = System.getProperty("env");
+		
+		if(env == null) env = "dev";
+		
+		String propertiesFile = String.format("/config/db.%s.properties", env);
+		
+		System.out.println(propertiesFile);
+		
 		try {
 			props.load(App.class.getResourceAsStream(propertiesFile));
 		} catch (Exception e) {
