@@ -1,7 +1,6 @@
 package com.ki.mavenDAO.DAOmaven;
 
 import java.sql.SQLException;
-import java.util.Properties;
 
 /**
  * Hello world!
@@ -10,22 +9,7 @@ import java.util.Properties;
 public class App {
 	public static void main(String[] args) {
 		
-		Properties props = new Properties();
-		
-		String env = System.getProperty("env");
-		
-		if(env == null) env = "dev";
-		
-		String propertiesFile = String.format("/config/db.%s.properties", env);
-		
-		System.out.println(propertiesFile);
-		
-		try {
-			props.load(App.class.getResourceAsStream(propertiesFile));
-		} catch (Exception e) {
-			System.out.println("Cannot load properties file: " + propertiesFile);
-			return;
-		}
+		var props = Profile.getProperties("db");
 		
 		var db = Database.instance();
 		
