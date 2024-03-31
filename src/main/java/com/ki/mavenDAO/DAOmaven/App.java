@@ -1,6 +1,8 @@
 package com.ki.mavenDAO.DAOmaven;
 
+import java.io.IOException;
 import java.sql.SQLException;
+import java.util.Properties;
 
 /**
  * Hello world!
@@ -9,13 +11,21 @@ import java.sql.SQLException;
 public class App {
 	public static void main(String[] args) {
 		
+		Properties props = new Properties();
+		try {
+			props.load(App.class.getResourceAsStream("/config/db.properties"));
+		} catch (IOException e1) {
+			e1.printStackTrace();
+			return;
+		}
+		
 		var db = Database.instance();
 		
 		try {
-			db.connect();
+			db.connect(props);
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
 			System.out.println("Cannot connect to database");
+			return;
 		}
 		
 		System.out.println("Connected");
