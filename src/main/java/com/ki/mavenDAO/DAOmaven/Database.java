@@ -29,7 +29,7 @@ public class Database {
 		String password = props.getProperty("password");
 		
 		String url = String.format("jdbc:mysql://%s:%s/%s", server, port, database);
-		System.out.println(url);
+//		System.out.println(url);
 		
 		conn = DriverManager.getConnection(url, user, password);
 	}
