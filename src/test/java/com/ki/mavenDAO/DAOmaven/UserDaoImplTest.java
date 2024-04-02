@@ -23,7 +23,7 @@ public class UserDaoImplTest {
 	private Connection conn;
 	private List<User> users;
 	
-	private static final int NUM_TEST_USERS = 419;
+	private static final int NUM_TEST_USERS = 4;
 	
 	private List<User> loadUsers() throws IOException {
 		
@@ -162,6 +162,37 @@ public class UserDaoImplTest {
 		var retrievedUsers = getUsersInRange((maxId - users.size()) + 1, maxId);
 		
 		assertEquals("Size of retrieved users not equal to number of test users", retrievedUsers.size(), NUM_TEST_USERS);
+		assertEquals("Retrieved users don't match saved users", users, retrievedUsers);
+		
+//		System.out.println(maxId);
+	}
+	
+	@Test
+	public void testDelete() throws SQLException {		
+		UserDao userDao = new UserDaoImpl();
+		
+		for(var u : users) {
+			userDao.save(u);
+		}
+		
+		var maxId = getMaxId();
+		
+		for(int i = 0; i < users.size(); i++) {
+			int id = (maxId - users.size()) + i + 1;
+			
+			users.get(i).setId(id);
+		}
+		
+		var deleteUserIndex = NUM_TEST_USERS/2;
+		var deleteUser = users.get(deleteUserIndex);
+		
+		
+		users.remove(deleteUser);
+		
+		userDao.delete(deleteUser);
+		var retrievedUsers = getUsersInRange((maxId - NUM_TEST_USERS) + 1, maxId);
+		
+		assertEquals("Size of retrieved users not equal to number of test users", retrievedUsers.size(), users.size());
 		assertEquals("Retrieved users don't match saved users", users, retrievedUsers);
 		
 //		System.out.println(maxId);
