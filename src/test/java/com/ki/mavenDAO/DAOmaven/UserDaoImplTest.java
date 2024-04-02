@@ -109,6 +109,40 @@ public class UserDaoImplTest {
 		return retrieved;
 	}
 	
+	
+	@Test
+	public void testFindAndUpdate() throws SQLException {
+		var user = users.get(0);
+		
+		UserDao userDao = new UserDaoImpl();
+		
+		userDao.save(user);
+		
+		var maxId = getMaxId();
+		
+		user.setId(maxId);
+		
+		var retrievedUserOpt = userDao.findById(maxId);
+		
+		assertTrue("No user retrieved", retrievedUserOpt.isPresent());
+		
+		var retrievedUser = retrievedUserOpt.get();
+		
+		assertEquals("Retrieved user doesn't match saved user", user, retrievedUser);
+		
+		user.setName("XYZABC");
+		
+		userDao.update(user);
+		
+		retrievedUserOpt = userDao.findById(maxId);
+		
+		assertTrue("No user retrieved", retrievedUserOpt.isPresent());
+		
+		retrievedUser = retrievedUserOpt.get();
+		
+		assertEquals("Retrieved user doesn't match updated user", user, retrievedUser);
+	}
+	
 	@Test
 	public void testSaveMultiple() throws SQLException {		
 		UserDao userDao = new UserDaoImpl();
@@ -130,7 +164,7 @@ public class UserDaoImplTest {
 		assertEquals("Size of retrieved users not equal to number of test users", retrievedUsers.size(), NUM_TEST_USERS);
 		assertEquals("Retrieved users don't match saved users", users, retrievedUsers);
 		
-		System.out.println(maxId);
+//		System.out.println(maxId);
 	}
 
 	@Test
