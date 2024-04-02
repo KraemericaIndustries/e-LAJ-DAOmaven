@@ -23,7 +23,7 @@ public class UserDaoImplTest {
 	private Connection conn;
 	private List<User> users;
 	
-	private static final int NUM_TEST_USERS = 1000;
+	private static final int NUM_TEST_USERS = 419;
 	
 	private List<User> loadUsers() throws IOException {
 		
@@ -88,7 +88,7 @@ public class UserDaoImplTest {
 		
 		List <User> retrieved = new ArrayList<User>();
 		
-		var stmt = conn.prepareStatement("select id, name from user where minId >= ? and maxId <= ?");
+		var stmt = conn.prepareStatement("select id, name from user where id >= ? and id <= ?");
 		
 		stmt.setInt(1, minId);
 		stmt.setInt(2, maxId);
@@ -118,6 +118,17 @@ public class UserDaoImplTest {
 		}
 		
 		var maxId = getMaxId();
+		
+		for(int i = 0; i < users.size(); i++) {
+			int id = (maxId - users.size()) + i + 1;
+			
+			users.get(i).setId(id);
+		}
+		
+		var retrievedUsers = getUsersInRange((maxId - users.size()) + 1, maxId);
+		
+		assertEquals("Size of retrieved users not equal to number of test users", retrievedUsers.size(), NUM_TEST_USERS);
+		assertEquals("Retrieved users don't match saved users", users, retrievedUsers);
 		
 		System.out.println(maxId);
 	}
