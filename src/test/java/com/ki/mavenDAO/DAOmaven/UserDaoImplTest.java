@@ -47,8 +47,8 @@ public class UserDaoImplTest {
 		
 		users = loadUsers();
 		
-		System.out.println(users);
-		System.out.println(users.size());
+//		System.out.println(users);
+//		System.out.println(users.size());
 		
 		var props = Profile.getProperties("db");
 		
@@ -65,6 +65,34 @@ public class UserDaoImplTest {
 	@After
 	public void tearDown() throws SQLException {
 		Database.instance().close();
+	}
+	
+	private int getMaxId() throws SQLException {
+		
+		var stmt = conn.createStatement();
+		
+		var rs = stmt.executeQuery("select max(id) as id from user");
+		
+		rs.next();
+		
+		var id = rs.getInt("id");
+		
+		stmt.close();
+		
+		return id;
+	}
+	
+	@Test
+	public void testSaveMultiple() throws SQLException {		
+		UserDao userDao = new UserDaoImpl();
+		
+		for(var u : users) {
+			userDao.save(u);
+		}
+		
+		var maxId = getMaxId();
+		
+		System.out.println(maxId);
 	}
 
 	@Test
