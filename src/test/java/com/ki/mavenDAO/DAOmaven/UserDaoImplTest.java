@@ -166,6 +166,31 @@ public class UserDaoImplTest {
 		
 //		System.out.println(maxId);
 	}
+	
+	@Test
+	public void testGetAll() throws SQLException {		
+		UserDao userDao = new UserDaoImpl();
+		
+		for(var u : users) {
+			userDao.save(u);
+		}
+		
+		var maxId = getMaxId();
+		
+		for(int i = 0; i < users.size(); i++) {
+			int id = (maxId - users.size()) + i + 1;
+			
+			users.get(i).setId(id);
+		}
+		
+		var dbUsers = userDao.getAll();
+		dbUsers = dbUsers.subList(dbUsers.size() - users.size(), dbUsers.size());
+		
+		assertEquals("Size of retrieved users not equal to number of test users", dbUsers.size(), NUM_TEST_USERS);
+		assertEquals("Retrieved users don't match saved users", users, dbUsers);
+		
+//		System.out.println(maxId);
+	}
 
 	@Test
 	public void testSave() throws SQLException {
